@@ -1,0 +1,9 @@
+streamlit
+requests
+pdfplumber
+pillow
+google-auth
+google-auth-oauthlib
+google-api-python-client
+python-docx
+beautifulsoup4
