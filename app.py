@@ -1,11 +1,12 @@
 import streamlit as st
 import requests
-import pdfplumber, pytesseract
+import pdfplumber
 from PIL import Image
 from google.colab import auth
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
-import io, os
+import io
+import os
 import docx
 from bs4 import BeautifulSoup
 
@@ -34,13 +35,15 @@ def listar_arquivos_recursivo(service, folder_id):
 
 # ----------- DOWNLOAD E EXTRAÇÃO -----------
 def baixar_arquivo(file_id, nome):
+    caminho = os.path.join("arquivos", nome)
+    os.makedirs("arquivos", exist_ok=True)
     request = drive_service.files().get_media(fileId=file_id)
-    fh = io.FileIO(nome, 'wb')
+    fh = io.FileIO(caminho, 'wb')
     downloader = MediaIoBaseDownload(fh, request)
     done = False
     while not done:
         _, done = downloader.next_chunk()
-    return nome
+    return caminho
 
 def extrair_texto(arquivo):
     texto = ""
@@ -55,8 +58,8 @@ def extrair_texto(arquivo):
         with open(arquivo, encoding="utf-8") as f:
             texto = BeautifulSoup(f, "html.parser").get_text()
     elif arquivo.endswith(".png") or arquivo.endswith(".jpg"):
-        imagem = Image.open(arquivo)
-        texto = pytesseract.image_to_string(imagem)
+        # Imagens ignoradas para OCR local - opcional: indicar que não extraiu texto
+        texto = "[Imagem - extração de texto via OCR não suportada no ambiente atual]"
     elif arquivo.endswith(".txt"):
         with open(arquivo, encoding="utf-8") as f:
             texto = f.read()
