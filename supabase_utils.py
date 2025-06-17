@@ -6,9 +6,9 @@ def get_supabase_client():
     key = st.secrets["supabase"]["key"]
     return create_client(url, key)
 
-def buscar_contexto():
+def buscar_contexto_documentos():
     supabase = get_supabase_client()
-    data = supabase.table("ia_base").select("*").execute()
-    registros = data.data if data.data else []
-    textos = [r["conteudo"] for r in registros if "conteudo" in r]
+    resposta = supabase.table("documentos").select("conteudo").execute()
+    documentos = resposta.data if resposta.data else []
+    textos = [doc["conteudo"] for doc in documentos if "conteudo" in doc and doc["conteudo"]]
     return "\n".join(textos)
