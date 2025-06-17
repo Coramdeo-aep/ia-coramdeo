@@ -1,9 +1,11 @@
 streamlit
-requests
-pdfplumber
-pillow
+google-api-python-client
 google-auth
 google-auth-oauthlib
-google-api-python-client
+pymupdf
 python-docx
 beautifulsoup4
+pandas
+openpyxl
+requests
+groq
