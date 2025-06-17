@@ -3,7 +3,7 @@ from supabase_utils import buscar_contexto_documentos
 from llm_utils import perguntar_para_ia
 
 st.set_page_config(page_title="Chat Coram Deo", page_icon="📚")
-st.title("🤖 Chat Institucional - Coram Deo")
+st.title("🤖 Chat Institucional")
 
 if "mensagens" not in st.session_state:
     st.session_state.mensagens = []
