@@ -12,7 +12,7 @@ Resposta:
     """
     # Usando API Groq com LLaMA 3 (exemplo)
     headers = {
-        "Authorization": f"Bearer SUA_CHAVE_GROQ",
+        "Authorization": f"Bearer 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",
         "Content-Type": "application/json"
     }
     payload = {
