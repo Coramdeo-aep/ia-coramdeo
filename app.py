@@ -1,11 +1,12 @@
 import streamlit as st
 import requests
+import os
 from groq import Groq
 
 # Configurações (configure as variáveis de ambiente no Streamlit Cloud)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
-TABELA = "documentos"
+TABELA = os.getenv("TABELA")
 
 # Groq API - Ajuste conforme seu SDK ou uso da API REST
 GROQ_API_KEY = os.getenv("GROQ_API_KEY") or "your-groq-api-key"
