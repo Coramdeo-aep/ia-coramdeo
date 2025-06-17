@@ -1,0 +1,12 @@
+FOLDER_ID = '1dyyR6Hz3_VkROH9XwB4YF6KukxEDwpdY'
+PASTA_BASE = "data"
+
+SUPABASE_URL = "https://trpgnvhwfnqrvywqkdbu.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRycGdudmh3Zm5xcnZ5d3FrZGJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5OTkzODMsImV4cCI6MjA2NDU3NTM4M30.iWhuc0SA30Mgu9qRjLFvmyOWP7aEEXPNIlz8RD4XXxA"
+TABELA = "documentos"
+
+GROQ_API_KEY = "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"
+
+# Controle de chamadas API
+API_CALLS_LIMIT = 20
+API_TIME_WINDOW = 60
