@@ -5,7 +5,7 @@ import urllib3
 # Desativa warnings de SSL inseguros (para teste)
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-WEBHOOK_URL = "https://n8n.diferro.com.br:5678/webhook-test/chat-coramdeo"
+WEBHOOK_URL = "https://n8n.diferro.com.br:5678/webhook/chat-coramdeo"
 
 st.title("🤖 Chat com a IA (via n8n Webhook)")
 
