@@ -1,5 +1,2 @@
 streamlit
-groq
-supabase
 requests
-python-dotenv
