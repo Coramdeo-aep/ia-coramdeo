@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import json
 
 st.set_page_config(page_title="Chat com IA - Diferro", layout="centered")
 
@@ -19,7 +20,7 @@ if st.button("Enviar") and user_input:
     try:
         # Pula a verificação de SSL para testes
         response = requests.post(url, json=payload, verify=False)
-        resposta = response.json().get("resposta", "⚠️ Resposta não encontrada.")
+        resposta = json.loads(response.text).get("resposta", "⚠️ Resposta não encontrada.")
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
 
