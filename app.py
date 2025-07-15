@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import json
 
 st.set_page_config(page_title="Chat com IA - Diferro", layout="centered")
 st.title("🤖 Chat IA Diferro")
@@ -17,11 +18,9 @@ if st.button("Enviar") and user_input:
     try:
         response = requests.post(url, json=payload, verify=False)
 
-        # Agora a resposta é texto puro (não JSON)
-        resposta = response.text.strip()
-
-        if not resposta:
-            resposta = "⚠️ Resposta vazia ou mal formatada."
+        # A resposta é texto, mas contém JSON (ex: {"output": "..."})
+        dados = json.loads(response.text)
+        resposta = dados.get("output", "⚠️ Resposta não encontrada.")
 
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
@@ -29,7 +28,7 @@ if st.button("Enviar") and user_input:
     st.session_state.history.append(("Você", user_input))
     st.session_state.history.append(("IA", resposta))
 
-# Exibe as mensagens
+# Exibe com formatação visual e Markdown
 for speaker, msg in st.session_state.history[::-1]:
     if speaker == "IA":
         styled_msg = msg.replace("\n", "<br>")
