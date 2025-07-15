@@ -18,14 +18,30 @@ if st.button("Enviar") and user_input:
     payload = {"chatInput": user_input}
 
     try:
-        # Pula a verificação de SSL para testes
+        # Envia a requisição, ignorando SSL (para ambiente de testes)
         response = requests.post(url, json=payload, verify=False)
-        resposta = json.loads(response.text).get("resposta", "⚠️ Resposta não encontrada.")
+
+        # Verifica status e se o corpo da resposta não está vazio
+        if response.status_code == 200 and response.text.strip():
+            data = json.loads(response.text)
+
+            # Se a resposta for uma lista (como no seu exemplo)
+            if isinstance(data, list) and data and isinstance(data[0], dict):
+                resposta = data[0].get("resposta", "⚠️ Resposta não encontrada.")
+            elif isinstance(data, dict):
+                resposta = data.get("resposta", "⚠️ Resposta não encontrada.")
+            else:
+                resposta = "⚠️ Formato de resposta inesperado."
+        else:
+            resposta = f"⚠️ Erro na resposta: status {response.status_code} | corpo vazio"
+
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
 
+    # Atualiza o histórico de mensagens
     st.session_state.history.append(("Você", user_input))
     st.session_state.history.append(("IA", resposta))
 
+# Exibe o histórico de conversas (última mensagem primeiro)
 for speaker, msg in st.session_state.history[::-1]:
     st.markdown(f"**{speaker}:** {msg}")
