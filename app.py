@@ -23,13 +23,10 @@ if st.button("Enviar") and user_input:
         print("Status code:", response.status_code)
         print("Resposta bruta:", repr(response.text))
 
-        # Verifica status e se o corpo da resposta não está vazio
         if response.status_code == 200 and response.text.strip():
-            # Certifica que estamos usando o encoding correto
             text = response.content.decode('utf-8')
             data = json.loads(text)
 
-            # Se a resposta for uma lista (como no seu exemplo)
             if isinstance(data, list) and data and isinstance(data[0], dict):
                 resposta = data[0].get("resposta", "⚠️ Resposta não encontrada.")
             elif isinstance(data, dict):
@@ -49,9 +46,18 @@ if st.button("Enviar") and user_input:
 # Exibe o histórico de conversas (última mensagem primeiro)
 for speaker, msg in st.session_state.history[::-1]:
     if speaker == "IA":
-        # Usa st.markdown puro (sem f-string) para preservar a formatação/marcadores
-        st.markdown(f"**{speaker}:**", unsafe_allow_html=True)
-        st.markdown(msg)
+        # Aplica formatação HTML leve com quebra de linha
+        styled_msg = msg.replace("\n", "<br>")
+
+        st.markdown(f"""
+            <div style="background-color: #f5f5f5; border-left: 4px solid #4CAF50; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                <strong>{speaker}:</strong><br>{styled_msg}
+            </div>
+        """, unsafe_allow_html=True)
     else:
-        # Você pode exibir o usuário normalmente
-        st.markdown(f"**{speaker}:** {msg}")
+        # Estilo para mensagem do usuário
+        st.markdown(f"""
+            <div style="background-color: #e8f0fe; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                <strong>{speaker}:</strong><br>{msg}
+            </div>
+        """, unsafe_allow_html=True)
