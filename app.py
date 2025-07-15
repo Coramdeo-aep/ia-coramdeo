@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # URL do webhook do n8n
-N8N_WEBHOOK_URL = "https://SEU_WEBHOOK_N8N_URL"
+N8N_WEBHOOK_URL = "https://n8n.diferro.com.br:5678/webhook/chat"
 
 st.title("Chat com n8n")
 
