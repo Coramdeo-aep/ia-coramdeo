@@ -1,27 +1,32 @@
 import streamlit as st
 import requests
-import urllib3
 
-# Desativa warnings de SSL inseguros (somente para testes)
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+st.set_page_config(page_title="Chat com IA - Diferro", layout="centered")
 
-WEBHOOK_URL = "https://n8n.diferro.com.br:5678/webhook/chat-coramdeo"
+st.title("🤖 Chat IA Diferro")
 
-st.title("🤖 Chat com a IA (via n8n Webhook)")
+# Histórico
+if "history" not in st.session_state:
+    st.session_state.history = []
 
-user_input = st.text_input("Digite sua pergunta:", "")
+# Input do usuário
+user_input = st.text_input("Digite sua pergunta:", key="input")
 
 if st.button("Enviar") and user_input:
+    # Chamada ao n8n com a chave correta "chatInput"
+    url = "https://n8n.diferro.com.br:5678/webhook-test/chat"
+    payload = {"chatInput": user_input}
+
     try:
-        # Envia a requisição POST para o webhook, ignorando verificação SSL (teste)
-        response = requests.post(WEBHOOK_URL, json={"pergunta": user_input}, verify=False)
+        response = requests.post(url, json=payload)
+        resposta = response.json().get("resposta", "⚠️ Resposta não encontrada.")
+    except Exception as e:
+        resposta = f"Erro ao conectar: {e}"
 
-        if response.status_code == 200:
-            data = response.json()
-            resposta = data.get("resposta", "Sem resposta definida.")
-            st.markdown(f"**Resposta da IA:** {resposta}")
-        else:
-            st.error(f"Erro ao conectar com a IA: {response.status_code}\nConteúdo: {response.text}")
+    # Adiciona ao histórico
+    st.session_state.history.append(("Você", user_input))
+    st.session_state.history.append(("IA", resposta))
 
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro na requisição: {e}")
+# Exibir histórico
+for speaker, msg in st.session_state.history[::-1]:
+    st.markdown(f"**{speaker}:** {msg}")
