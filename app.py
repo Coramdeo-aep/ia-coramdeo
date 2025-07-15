@@ -1,47 +1,30 @@
 import streamlit as st
 import requests
-import json
-import re
 
-st.set_page_config(page_title="Chat com IA - Diferro", layout="centered")
-st.title("🤖 Chat IA Diferro")
+# URL do webhook do n8n
+N8N_WEBHOOK_URL = "https://SEU_WEBHOOK_N8N_URL"
 
-# Histórico
-if "history" not in st.session_state:
-    st.session_state.history = []
+st.title("Chat com n8n")
 
-user_input = st.text_input("Digite sua pergunta:", key="input")
+# Caixa de entrada do usuário
+mensagem = st.text_input("Digite sua mensagem:")
 
-if st.button("Enviar") and user_input:
-    url = "https://n8n.diferro.com.br:5678/webhook/chat"
-    payload = {"chatInput": user_input}
-
-    try:
-        response = requests.post(url, json=payload, verify=False)
-        dados = json.loads(response.text)
-        resposta = dados.get("output", "⚠️ Resposta não encontrada.")
-
-        # Substitui **texto** por <strong>texto</strong>
-        resposta_formatada = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", resposta)
-
-    except Exception as e:
-        resposta_formatada = f"Erro ao conectar: {e}"
-
-    st.session_state.history.append(("Você", user_input))
-    st.session_state.history.append(("IA", resposta_formatada))
-
-# Exibe as mensagens formatadas
-for speaker, msg in st.session_state.history[::-1]:
-    if speaker == "IA":
-        styled_msg = msg.replace("\n", "<br>")
-        st.markdown(f"""
-            <div style="background-color: #f5f5f5; border-left: 4px solid #4CAF50; padding: 10px; border-radius: 6px; margin-top: 10px;">
-                <strong>{speaker}:</strong><br>{styled_msg}
-            </div>
-        """, unsafe_allow_html=True)
+# Botão para enviar
+if st.button("Enviar"):
+    if mensagem.strip() == "":
+        st.warning("Digite algo antes de enviar.")
     else:
-        st.markdown(f"""
-            <div style="background-color: #e8f0fe; padding: 10px; border-radius: 6px; margin-top: 10px;">
-                <strong>{speaker}:</strong><br>{msg}
-            </div>
-        """, unsafe_allow_html=True)
+        # Enviando a mensagem como JSON para o n8n
+        payload = [{"mensagem": mensagem}]
+        try:
+            resposta = requests.post(N8N_WEBHOOK_URL, json=payload)
+            if resposta.status_code == 200:
+                dados = resposta.json()
+
+                # Exibindo a resposta do n8n
+                st.success("Resposta do n8n:")
+                st.markdown(dados[0]["output"])
+            else:
+                st.error(f"Erro ao contatar o n8n: {resposta.status_code}")
+        except Exception as e:
+            st.error(f"Erro na requisição: {e}")
