@@ -20,6 +20,8 @@ if st.button("Enviar") and user_input:
     try:
         # Envia a requisição, ignorando SSL (para ambiente de testes)
         response = requests.post(url, json=payload, verify=False)
+        print("Status code:", response.status_code)
+        print("Resposta bruta:", repr(response.text))
 
         # Verifica status e se o corpo da resposta não está vazio
         if response.status_code == 200 and response.text.strip():
