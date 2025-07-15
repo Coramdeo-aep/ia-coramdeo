@@ -13,7 +13,7 @@ if "history" not in st.session_state:
 user_input = st.text_input("Digite sua pergunta:", key="input")
 
 if st.button("Enviar") and user_input:
-    url = "https://n8n.diferro.com.br:5678/webhook-test/chat"
+    url = "https://n8n.diferro.com.br:5678/webhook/chat"
     payload = {"chatInput": user_input}
 
     try:
