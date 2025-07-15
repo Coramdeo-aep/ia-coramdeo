@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import certifi
 
 st.set_page_config(page_title="Chat com IA - Diferro", layout="centered")
 
@@ -18,7 +19,7 @@ if st.button("Enviar") and user_input:
     payload = {"chatInput": user_input}
 
     try:
-        response = requests.post(url, json=payload)
+        response = requests.post(url, json=payload, verify=certifi.where())
         resposta = response.json().get("resposta", "⚠️ Resposta não encontrada.")
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
