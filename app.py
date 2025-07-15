@@ -14,20 +14,18 @@ if "history" not in st.session_state:
 user_input = st.text_input("Digite sua pergunta:", key="input")
 
 if st.button("Enviar") and user_input:
-    # Chamada ao n8n com a chave correta "chatInput"
-    url = "https://n8n.diferro.com.br:5678/webhook-test/chat"
+    url = "https://n8n.diferro.com.br:5678/webhook/chat"
     payload = {"chatInput": user_input}
 
     try:
+        # Passa o caminho dos certificados para o requests validar SSL corretamente
         response = requests.post(url, json=payload, verify=certifi.where())
         resposta = response.json().get("resposta", "⚠️ Resposta não encontrada.")
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
 
-    # Adiciona ao histórico
     st.session_state.history.append(("Você", user_input))
     st.session_state.history.append(("IA", resposta))
 
-# Exibir histórico
 for speaker, msg in st.session_state.history[::-1]:
     st.markdown(f"**{speaker}:** {msg}")
