@@ -18,9 +18,8 @@ if st.button("Enviar") and user_input:
     try:
         response = requests.post(url, json=payload, verify=False)
 
-        # Interpreta a resposta como JSON
         dados = json.loads(response.text)
-        resposta = dados.get("output", "⚠️ Resposta não encontrada.")
+        resposta = dados[0].get("output", "⚠️ Resposta não encontrada.")  # <- pega da lista
 
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
@@ -28,10 +27,7 @@ if st.button("Enviar") and user_input:
     st.session_state.history.append(("Você", user_input))
     st.session_state.history.append(("IA", resposta))
 
-# Exibe as mensagens com Markdown nativo
+# Exibe mensagens
 for speaker, msg in st.session_state.history[::-1]:
-    if speaker == "IA":
-        st.markdown(f"**{speaker}:**")
-        st.markdown(msg)  # renderiza Markdown nativamente
-    else:
-        st.markdown(f"**{speaker}:** {msg}")
+    st.markdown(f"**{speaker}:**")
+    st.markdown(msg)
