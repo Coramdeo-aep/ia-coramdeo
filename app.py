@@ -8,7 +8,6 @@ st.title("🤖 Chat IA Diferro")
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# Input
 user_input = st.text_input("Digite sua pergunta:", key="input")
 
 if st.button("Enviar") and user_input:
@@ -18,9 +17,11 @@ if st.button("Enviar") and user_input:
     try:
         response = requests.post(url, json=payload, verify=False)
 
-        # Usando response.json() — equivalente a json.load
-        dados = response.json()
-        resposta = dados.get("resposta", "⚠️ Resposta não encontrada.")
+        # Agora a resposta é texto puro (não JSON)
+        resposta = response.text.strip()
+
+        if not resposta:
+            resposta = "⚠️ Resposta vazia ou mal formatada."
 
     except Exception as e:
         resposta = f"Erro ao conectar: {e}"
@@ -28,7 +29,7 @@ if st.button("Enviar") and user_input:
     st.session_state.history.append(("Você", user_input))
     st.session_state.history.append(("IA", resposta))
 
-# Exibição
+# Exibe as mensagens
 for speaker, msg in st.session_state.history[::-1]:
     if speaker == "IA":
         styled_msg = msg.replace("\n", "<br>")
