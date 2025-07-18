@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # URL do seu webhook do n8n
-N8N_WEBHOOK_URL = "https://n8n.diferro.com.br:5678/webhook-test/chat"
+N8N_WEBHOOK_URL = "https://n8n.diferro.com.br:5678/webhook/chat"
 
 st.title("Assistente Diferro com n8n")
 st.write("Você está conversando com um assistente conectado ao n8n. Envie sua pergunta abaixo:")
