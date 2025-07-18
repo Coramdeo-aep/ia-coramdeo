@@ -15,7 +15,7 @@ if st.button("Enviar"):
         st.warning("Digite algo antes de enviar.")
     else:
         # Enviando a mensagem para o n8n
-        payload = [{"mensagem": mensagem}]
+        payload = {"mensagem": mensagem}
         try:
             resposta = requests.post(N8N_WEBHOOK_URL, json=payload, verify=False)
             if resposta.status_code == 200:
